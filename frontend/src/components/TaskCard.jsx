@@ -32,22 +32,20 @@ const TaskCard = ({ task, onEdit, onDelete, onUpdate, isEditing, onCancelEdit })
     return (
         <motion.div
             layout
-            className="task-card glass-panel"
+            className="task-card"
             variants={{
                 hidden: { opacity: 0, y: 20 },
                 show: { opacity: 1, y: 0 }
             }}
-            whileHover={{ y: -5, transition: { duration: 0.2 } }}
-            exit={{ opacity: 0, scale: 0.9 }}
+            whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            exit={{ opacity: 0, scale: 0.95 }}
         >
-            <div>
+            <div className="task-body">
                 <div className="task-header">
                     <h3 className="task-title">{task.title}</h3>
                     <span className={`task-status status-${task.status}`}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                            {getStatusIcon(task.status)}
-                            {task.status}
-                        </span>
+                        {getStatusIcon(task.status)}
+                        <span style={{ marginLeft: '6px' }}>{task.status}</span>
                     </span>
                 </div>
                 <p className="task-desc">{task.description}</p>
@@ -55,10 +53,11 @@ const TaskCard = ({ task, onEdit, onDelete, onUpdate, isEditing, onCancelEdit })
 
             <div className="task-actions">
                 <button onClick={onEdit} className="btn-icon" title="Edit">
-                    <Edit2 size={18} />
+                    <Edit2 size={16} strokeWidth={2.5} />
                 </button>
+                <div style={{ width: '1px', height: '14px', background: 'rgba(255,255,255,0.1)', margin: '0 4px' }} />
                 <button onClick={onDelete} className="btn-icon delete" title="Delete">
-                    <Trash2 size={18} />
+                    <Trash2 size={16} strokeWidth={2.5} />
                 </button>
             </div>
         </motion.div>

@@ -26,7 +26,10 @@ const Navbar = () => {
                     </div>
 
                     <div className="nav-links nav-links--public">
-                        <Link to="/login" className="nav-item nav-item--muted">Sign in</Link>
+                        <Link to="/#features" className="nav-item">Features</Link>
+                        <Link to="/#process" className="nav-item">Process</Link>
+                        <Link to="/#about" className="nav-item">About Us</Link>
+                        <Link to="/login" className="nav-item nav-item--muted" style={{ marginLeft: '1rem' }}>Sign in</Link>
                     </div>
 
                     <button

@@ -125,17 +125,37 @@ const Dashboard = () => {
                 )}
 
                 <div className="filter-tabs">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', marginRight: '1rem' }}>
-                        <Filter size={16} />
-                        <span>Filter:</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', marginRight: '0.75rem', marginLeft: '0.5rem', fontSize: '0.85rem', fontWeight: 600 }}>
+                        <Filter size={14} />
+                        <span>Filter</span>
                     </div>
                     {['', 'pending', 'in-progress', 'completed'].map((f) => (
                         <button
                             key={f}
-                            className={filter === f ? 'tab-active' : 'tab'}
+                            className={filter === f ? 'tab tab-active' : 'tab'}
                             onClick={() => setFilter(f)}
+                            style={{ position: 'relative' }}
                         >
-                            {f === '' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}
+                            <span style={{ position: 'relative', zIndex: 2 }}>
+                                {f === '' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}
+                            </span>
+                            {filter === f && (
+                                <motion.div
+                                    layoutId="activeTabIndicator"
+                                    className="active-tab-indicator"
+                                    initial={false}
+                                    transition={{
+                                        type: "spring",
+                                        stiffness: 450,
+                                        damping: 35
+                                    }}
+                                    style={{
+                                        position: 'absolute',
+                                        inset: '4px',
+                                        zIndex: 1
+                                    }}
+                                />
+                            )}
                         </button>
                     ))}
                 </div>
@@ -145,10 +165,20 @@ const Dashboard = () => {
                 ) : tasks.length === 0 ? (
                     <motion.div
                         className="empty-state glass-panel"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
                     >
+                        <div style={{ background: 'rgba(255,255,255,0.05)', padding: '1.5rem', borderRadius: '50%', marginBottom: '0.5rem' }}>
+                            <Plus size={40} strokeWidth={1.5} />
+                        </div>
                         <p>No tasks found. Start by creating a new one!</p>
+                        <button
+                            className="btn-secondary"
+                            onClick={() => setShowForm(true)}
+                            style={{ marginTop: '0.5rem' }}
+                        >
+                            Create your first task
+                        </button>
                     </motion.div>
                 ) : (
                     <motion.div
@@ -180,7 +210,7 @@ const Dashboard = () => {
                         </AnimatePresence>
                     </motion.div>
                 )}
-            </div>
+            </div >
         </>
     );
 };

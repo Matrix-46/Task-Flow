@@ -173,34 +173,47 @@
 .dashboard-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 4rem 3rem;
+  padding: 6rem 1.5rem;
+  position: relative;
+}
+
+.dashboard-container::before {
+  content: "";
+  position: fixed;
+  top: 10%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+  z-index: -1;
+  pointer-events: none;
 }
 
 .dashboard-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 4rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid var(--glass-border);
+  align-items: flex-end;
+  margin-bottom: 3.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   gap: 2rem;
-  flex-wrap: wrap;
 }
 
 .dashboard-header h1 {
-  font-size: 3.5rem;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
   font-weight: 800;
-  letter-spacing: -0.03em;
-  background-clip: text;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .dashboard-subtitle {
   color: var(--text-secondary);
-  font-size: 1.2rem;
-  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 500;
 }
 
 /* --- Navbar (FIXED) --- */
@@ -378,14 +391,11 @@
 
 .landing {
   min-height: 100vh;
-  height: 100vh;
-  width: 100vw;
-  width: 100vw;
+  width: 100%;
   /* Global background used */
   background: transparent;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   position: relative;
 }
 
@@ -409,19 +419,15 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%;
   width: 100%;
 }
 
 .landing-hero {
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  max-width: 1000px;
   width: 100%;
-  margin-top: 0;
-  padding-top: 4rem;
+  padding: 140px 0 100px;
+  /* Increased top padding from 100px */
+  text-align: center;
 }
 
 .hero-grid {
@@ -439,11 +445,8 @@
   box-shadow: var(--shadow-soft);
   position: relative;
   overflow: hidden;
-  background-image:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.25) 55%, rgba(0, 0, 0, 0.65) 100%),
-    url("/images/arik/hero.webp");
-  background-size: cover;
-  background-position: center;
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .hero-visual::before {
@@ -523,12 +526,15 @@
 }
 
 .landing-eyebrow {
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  font-size: 0.82rem;
-  margin-bottom: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  /* Increased from 1.5rem */
+  opacity: 0.8;
 }
 
 .landing-title {
@@ -695,45 +701,31 @@
 }
 
 .work-media--a {
-  background-image:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.55) 100%),
-    url("/images/arik/work-space.avif");
+  background: linear-gradient(45deg, #312e81, #1e1b4b);
 }
 
 .work-media--b {
-  background-image:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.55) 100%),
-    url("/images/arik/work-sonic.avif");
+  background: linear-gradient(45deg, #4338ca, #312e81);
 }
 
 .work-media--c {
-  background-image:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.55) 100%),
-    url("/images/arik/work-solar.avif");
+  background: linear-gradient(45deg, #4f46e5, #4338ca);
 }
 
 .work-media--d {
-  background-image:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.55) 100%),
-    url("/images/arik/work-nova.avif");
+  background: linear-gradient(45deg, #6366f1, #4f46e5);
 }
 
 .work-media--blog1 {
-  background-image:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.55) 100%),
-    url("/images/arik/work-space.avif");
+  background: linear-gradient(45deg, #312e81, #1e1b4b);
 }
 
 .work-media--blog2 {
-  background-image:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.55) 100%),
-    url("/images/arik/work-sonic.avif");
+  background: linear-gradient(45deg, #4338ca, #312e81);
 }
 
 .work-media--blog3 {
-  background-image:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.55) 100%),
-    url("/images/arik/about.webp");
+  background: linear-gradient(45deg, #4f46e5, #4338ca);
 }
 
 .work-tag {
@@ -916,7 +908,7 @@
   }
 
   .landing-hero {
-    padding: 70px 0 40px;
+    padding: 120px 0 60px;
   }
 
   .hero-grid {
@@ -929,39 +921,54 @@
 /* --- Tasks & Grid --- */
 .tasks-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.5rem;
 }
 
 .task-card {
-  padding: 2rem;
-  border-radius: 20px;
+  padding: 1.75rem;
+  border-radius: var(--radius-xl);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 200px;
-  transition: all 0.3s ease;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%);
+  min-height: 220px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .task-card:hover {
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  gap: 12px;
 }
 
 .task-title {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
-  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: white;
 }
 
 .task-desc {
   color: var(--text-secondary);
   font-size: 0.95rem;
   line-height: 1.6;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .task-status {
@@ -996,13 +1003,15 @@
 /* --- Filter Tabs --- */
 .filter-tabs {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 2rem;
-  background: rgba(255, 255, 255, 0.03);
-  padding: 0.5rem;
-  border-radius: 16px;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 2.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 4px;
+  border-radius: 12px;
   width: fit-content;
-  border: 1px solid var(--glass-border);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
 }
 
 .tab {
@@ -1010,21 +1019,31 @@
   color: var(--text-secondary);
   border: none;
   padding: 0.6rem 1.25rem;
-  border-radius: 12px;
+  border-radius: 9px;
   cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s;
+  font-weight: 600;
+  transition: color 0.2s ease;
+  font-size: 0.85rem;
+  position: relative;
+  z-index: 1;
 }
 
 .tab:hover {
   color: white;
-  background: rgba(255, 255, 255, 0.05);
 }
 
 .tab-active {
-  background: var(--primary-glow);
-  color: white;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  color: #050505 !important;
+}
+
+.active-tab-indicator {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  background: #ffffff;
+  border-radius: 8px;
+  z-index: 0;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
 }
 
 .loading,
@@ -1038,8 +1057,14 @@
 
 .empty-state.glass-panel {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  background: rgba(255, 255, 255, 0.02);
+  border: 2px dashed rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-xl);
+  padding: 5rem 2rem;
+  gap: 1rem;
 }
 
 .landing-footer {
@@ -1114,7 +1139,7 @@
   }
 
   .landing-hero {
-    padding-top: 3rem;
+    padding-top: 5rem;
   }
 
   .landing-metrics {
@@ -1182,7 +1207,7 @@
   }
 
   .landing-hero {
-    padding-top: 2rem;
+    padding-top: 4rem;
     margin-top: 0;
   }
 
