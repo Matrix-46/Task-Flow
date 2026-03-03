@@ -14,6 +14,7 @@ const Register = () => {
         confirmPassword: ''
     });
     const [error, setError] = useState('');
+    const [fieldErrors, setFieldErrors] = useState({});
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -21,6 +22,7 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setFieldErrors({});
         setLoading(true);
 
         if (formData.password !== formData.confirmPassword) {
@@ -34,6 +36,13 @@ const Register = () => {
             navigate('/dashboard');
         } else {
             setError(result.message);
+            if (result.errors) {
+                const errors = {};
+                result.errors.forEach(err => {
+                    errors[err.field || err.path] = err.message || err.msg;
+                });
+                setFieldErrors(errors);
+            }
         }
         setLoading(false);
     };
@@ -63,7 +72,9 @@ const Register = () => {
                                 onChange={handleChange}
                                 required
                                 placeholder="name@company.com"
+                                className={fieldErrors.email ? 'input-error' : ''}
                             />
+                            {fieldErrors.email && <span className="field-error">{fieldErrors.email}</span>}
                         </div>
                         <div className="form-group">
                             <label>Password</label>
@@ -74,7 +85,9 @@ const Register = () => {
                                 onChange={handleChange}
                                 required
                                 placeholder="Minimum 6 characters"
+                                className={fieldErrors.password ? 'input-error' : ''}
                             />
+                            {fieldErrors.password && <span className="field-error">{fieldErrors.password}</span>}
                         </div>
                         <div className="form-group">
                             <label>Confirm Password</label>

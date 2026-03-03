@@ -56,10 +56,11 @@ export const AuthProvider = ({ children }) => {
 
             return { success: true };
         } catch (error) {
+            const errorData = error.response?.data;
             return {
                 success: false,
-                message: error.response?.data?.message || 'Registration failed',
-                errors: error.response?.data?.errors
+                message: errorData?.message || 'Registration failed',
+                errors: errorData?.errors || []
             };
         }
     };
