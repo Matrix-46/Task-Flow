@@ -17,7 +17,6 @@ const http = require('http');
 const authRoutes = require('./routes/auth');
 const taskRoutes = require('./routes/tasks');
 
-connectDB();
 
 const app = express();
 const server = http.createServer(app);
@@ -90,10 +89,21 @@ app.use((req, res) => {
 
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+const startServer = async () => {
+    try {
+        await connectDB();
+
+        const PORT = process.env.PORT || 5000;
+        server.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    } catch (error) {
+        console.error('Failed to start server due to database connection error:', error);
+        process.exit(1);
+    }
+};
+
+startServer();
 
 process.on('unhandledRejection', (err) => {
     server.close(() => process.exit(1));
