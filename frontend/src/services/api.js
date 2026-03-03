@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || '/api/v1';
+const baseAPI = import.meta.env.VITE_API_URL || '/api/v1';
+const API_URL = baseAPI.endsWith('/') ? baseAPI : `${baseAPI}/`;
 
 // Create axios instance
 const api = axios.create({
@@ -55,9 +56,9 @@ api.interceptors.response.use(
 
 // Auth APIs
 export const authAPI = {
-    register: (data) => api.post('/auth/register', data),
-    login: (data) => api.post('/auth/login', data),
-    getMe: () => api.get('/auth/me')
+    register: (data) => api.post('auth/register', data),
+    login: (data) => api.post('auth/login', data),
+    getMe: () => api.get('auth/me')
 };
 
 // Task APIs
@@ -69,12 +70,12 @@ export const taskAPI = {
         if (page) params.append('page', page);
         if (limit) params.append('limit', limit);
         const queryString = params.toString();
-        return api.get(`/tasks${queryString ? `?${queryString}` : ''}`);
+        return api.get(`tasks${queryString ? `?${queryString}` : ''}`);
     },
-    getTask: (id) => api.get(`/tasks/${id}`),
-    createTask: (data) => api.post('/tasks', data),
-    updateTask: (id, data) => api.put(`/tasks/${id}`, data),
-    deleteTask: (id) => api.delete(`/tasks/${id}`)
+    getTask: (id) => api.get(`tasks/${id}`),
+    createTask: (data) => api.post('tasks', data),
+    updateTask: (id, data) => api.put(`tasks/${id}`, data),
+    deleteTask: (id) => api.delete(`tasks/${id}`)
 };
 
 export default api;
