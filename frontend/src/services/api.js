@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const baseAPI = import.meta.env.VITE_API_URL || '/api/v1';
+const rawAPI = import.meta.env.VITE_API_URL || '/api/v1';
+const baseAPI = rawAPI.trim();
 const API_URL = baseAPI.endsWith('/') ? baseAPI : `${baseAPI}/`;
 
 // Create axios instance
