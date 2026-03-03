@@ -5,7 +5,8 @@ const TaskForm = ({ onSubmit, onCancel, initialData }) => {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        status: 'pending'
+        status: 'pending',
+        priority: 'medium'
     });
 
     useEffect(() => {
@@ -13,7 +14,8 @@ const TaskForm = ({ onSubmit, onCancel, initialData }) => {
             setFormData({
                 title: initialData.title,
                 description: initialData.description || '',
-                status: initialData.status
+                status: initialData.status,
+                priority: initialData.priority || 'medium'
             });
         }
     }, [initialData]);
@@ -67,15 +69,6 @@ const TaskForm = ({ onSubmit, onCancel, initialData }) => {
                             onChange={handleChange}
                             placeholder="Add details..."
                             rows="3"
-                            style={{
-                                width: '100%',
-                                padding: '0.75rem',
-                                background: 'rgba(255, 255, 255, 0.05)',
-                                border: '1px solid var(--glass-border)',
-                                borderRadius: '12px',
-                                color: 'white',
-                                outline: 'none'
-                            }}
                         />
                     </div>
 
@@ -85,19 +78,34 @@ const TaskForm = ({ onSubmit, onCancel, initialData }) => {
                             name="status"
                             value={formData.status}
                             onChange={handleChange}
-                            style={{
-                                width: '100%',
-                                padding: '0.75rem',
-                                background: 'var(--bg-dark)',
-                                border: '1px solid var(--glass-border)',
-                                borderRadius: '12px',
-                                color: 'white'
-                            }}
                         >
                             <option value="pending">Pending</option>
                             <option value="in-progress">In Progress</option>
                             <option value="completed">Completed</option>
                         </select>
+                    </div>
+
+                    <div className="form-group">
+                        <label>Priority</label>
+                        <select
+                            name="priority"
+                            value={formData.priority}
+                            onChange={handleChange}
+                        >
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+
+                    <div className="form-group">
+                        <label>Due Date</label>
+                        <input
+                            type="date"
+                            name="dueDate"
+                            value={formData.dueDate ? formData.dueDate.split('T')[0] : ''}
+                            onChange={handleChange}
+                        />
                     </div>
 
                     <div className="form-actions">

@@ -4,11 +4,45 @@ A simple task management application with user authentication and role-based acc
 
 ## Features
 
-- User registration and login
+- User registration and login (with Secure Refresh Tokens)
 - JWT authentication
 - Role-based access (user/admin)
 - Create, read, update, delete tasks
-- Filter tasks by status
+- **Advanced Search & Filtering**
+- **Premium Dark Mode** support
+- **Real-time Synchronization** with Socket.io
+- **Dockerized Environment** for consistent deployment
+- **Interactive API Documentation** with Swagger
+
+## Quick Start (Docker)
+
+If you have Docker installed, the easiest way to run the production build is:
+
+```bash
+docker compose up --build -d
+```
+
+- **Frontend**: `http://localhost` (Standard port 80)
+- **Backend API**: `http://localhost:5000/api/v1`
+- **Interactive Documentation**: `http://localhost:5000/api-docs`
+
+> [!NOTE]
+> The project uses a multi-stage Docker build. The frontend is served via **Nginx** for optimal performance, while the backend runs as a separate Node.js service.
+
+## Hosting & Deployment
+
+### Preparation for GitHub Push
+1. Ensure all sensitive information is in `.env` files (not tracked by Git).
+2. Check that `.env.example` files are up to date.
+3. Verify that `node_modules` and build artifacts are ignored.
+
+### Recommended Hosting
+- **Frontend**: [Vercel](https://vercel.com) or [Netlify](https://www.netlify.com).
+- **Backend**: [Render](https://render.com), [Railway](https://railway.app), or [DigitalOcean](https://www.digitalocean.com).
+- **Database**: [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) (Free Cluster).
+
+### Docker Deployment
+The project includes a `docker-compose.yml` for multi-container deployment, suitable for VPS hosting with Docker Compose.
 
 ## Tech Stack
 
@@ -105,7 +139,7 @@ backend/
 │   ├── models/         # MongoDB models
 │   ├── routes/         # API routes
 │   ├── validators/     # Input validation
-│   └── server.js       # Entry point
+│   └── index.js        # Entry point
 └── package.json
 
 frontend/

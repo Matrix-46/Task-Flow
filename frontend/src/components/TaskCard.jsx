@@ -43,12 +43,23 @@ const TaskCard = ({ task, onEdit, onDelete, onUpdate, isEditing, onCancelEdit })
             <div className="task-body">
                 <div className="task-header">
                     <h3 className="task-title">{task.title}</h3>
-                    <span className={`task-status status-${task.status}`}>
-                        {getStatusIcon(task.status)}
-                        <span style={{ marginLeft: '6px' }}>{task.status}</span>
-                    </span>
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                        <span className={`task-status status-${task.status}`}>
+                            {getStatusIcon(task.status)}
+                            <span style={{ marginLeft: '6px' }}>{task.status}</span>
+                        </span>
+                        <span className={`priority-badge priority-${task.priority}`}>
+                            {task.priority}
+                        </span>
+                    </div>
                 </div>
                 <p className="task-desc">{task.description}</p>
+                {task.dueDate && (
+                    <div style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                        <Clock size={14} />
+                        <span>Due: {new Date(task.dueDate).toLocaleDateString()}</span>
+                    </div>
+                )}
             </div>
 
             <div className="task-actions">

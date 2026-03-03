@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { taskAPI } from '../services/api';
+import { useSocket } from '../context/SocketContext';
 import Navbar from '../components/Navbar';
 import TaskCard from '../components/TaskCard';
 import TaskForm from '../components/TaskForm';
@@ -15,19 +16,65 @@ const Dashboard = () => {
     const [error, setError] = useState('');
     const [showForm, setShowForm] = useState(false);
     const [editingTask, setEditingTask] = useState(null);
-    const [filter, setFilter] = useState('');
+    const [search, setSearch] = useState('');
     const [success, setSuccess] = useState('');
+    const [filter, setFilter] = useState('');
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(false);
+
+    const socket = useSocket();
 
     useEffect(() => {
-        fetchTasks();
-    }, [filter]);
+        if (!socket) return;
 
-    const fetchTasks = async () => {
+        socket.on('task:created', (newTask) => {
+            // Check if it matches current filter
+            if (!filter || newTask.status === filter) {
+                setTasks(prev => [newTask, ...prev]);
+            }
+        });
+
+        socket.on('task:updated', (updatedTask) => {
+            setTasks(prev => prev.map(t => t._id === updatedTask._id ? updatedTask : t));
+        });
+
+        socket.on('task:deleted', (taskId) => {
+            setTasks(prev => prev.filter(t => t._id !== taskId));
+        });
+
+        return () => {
+            socket.off('task:created');
+            socket.off('task:updated');
+            socket.off('task:deleted');
+        };
+    }, [socket, filter, search]);
+
+    useEffect(() => {
+        setPage(1);
+        fetchTasks(true);
+    }, [filter, search]);
+
+    useEffect(() => {
+        if (page > 1) {
+            fetchTasks(false);
+        }
+    }, [page]);
+
+    const fetchTasks = async (reset = false) => {
         try {
             setLoading(true);
             setError('');
-            const response = await taskAPI.getTasks(filter);
-            setTasks(response.data.data.tasks);
+            const currentPage = reset ? 1 : page;
+            const response = await taskAPI.getTasks(filter, search, currentPage);
+            const newTasks = response.data.data.tasks;
+
+            if (reset) {
+                setTasks(newTasks);
+            } else {
+                setTasks(prev => [...prev, ...newTasks]);
+            }
+
+            setHasMore(response.data.pagination.page < response.data.pagination.pages);
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to fetch tasks');
         } finally {
@@ -124,40 +171,53 @@ const Dashboard = () => {
                     />
                 )}
 
-                <div className="filter-tabs">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', marginRight: '0.75rem', marginLeft: '0.5rem', fontSize: '0.85rem', fontWeight: 600 }}>
-                        <Filter size={14} />
-                        <span>Filter</span>
+                <div className="filter-area" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '1rem' }}>
+                    <div className="search-bar glass-panel" style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '0.75rem 1.25rem', borderRadius: '16px' }}>
+                        <Plus size={20} style={{ transform: 'rotate(45deg)', color: 'var(--text-secondary)' }} />
+                        <input
+                            type="text"
+                            placeholder="Find a task..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            style={{ background: 'transparent', border: 'none', color: 'var(--text-primary)', outline: 'none', width: '100%', fontSize: '1rem' }}
+                        />
                     </div>
-                    {['', 'pending', 'in-progress', 'completed'].map((f) => (
-                        <button
-                            key={f}
-                            className={filter === f ? 'tab tab-active' : 'tab'}
-                            onClick={() => setFilter(f)}
-                            style={{ position: 'relative' }}
-                        >
-                            <span style={{ position: 'relative', zIndex: 2 }}>
-                                {f === '' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}
-                            </span>
-                            {filter === f && (
-                                <motion.div
-                                    layoutId="activeTabIndicator"
-                                    className="active-tab-indicator"
-                                    initial={false}
-                                    transition={{
-                                        type: "spring",
-                                        stiffness: 450,
-                                        damping: 35
-                                    }}
-                                    style={{
-                                        position: 'absolute',
-                                        inset: '4px',
-                                        zIndex: 1
-                                    }}
-                                />
-                            )}
-                        </button>
-                    ))}
+
+                    <div className="filter-tabs">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', marginRight: '0.75rem', marginLeft: '0.5rem', fontSize: '0.85rem', fontWeight: 600 }}>
+                            <Filter size={14} />
+                            <span>Filter</span>
+                        </div>
+                        {['', 'pending', 'in-progress', 'completed'].map((f) => (
+                            <button
+                                key={f}
+                                className={filter === f ? 'tab tab-active' : 'tab'}
+                                onClick={() => setFilter(f)}
+                                style={{ position: 'relative' }}
+                            >
+                                <span style={{ position: 'relative', zIndex: 2 }}>
+                                    {f === '' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}
+                                </span>
+                                {filter === f && (
+                                    <motion.div
+                                        layoutId="activeTabIndicator"
+                                        className="active-tab-indicator"
+                                        initial={false}
+                                        transition={{
+                                            type: "spring",
+                                            stiffness: 450,
+                                            damping: 35
+                                        }}
+                                        style={{
+                                            position: 'absolute',
+                                            inset: '4px',
+                                            zIndex: 1
+                                        }}
+                                    />
+                                )}
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 {loading ? (
@@ -168,9 +228,6 @@ const Dashboard = () => {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                     >
-                        <div style={{ background: 'rgba(255,255,255,0.05)', padding: '1.5rem', borderRadius: '50%', marginBottom: '0.5rem' }}>
-                            <Plus size={40} strokeWidth={1.5} />
-                        </div>
                         <p>No tasks found. Start by creating a new one!</p>
                         <button
                             className="btn-secondary"
@@ -210,7 +267,19 @@ const Dashboard = () => {
                         </AnimatePresence>
                     </motion.div>
                 )}
-            </div >
+
+                {hasMore && !loading && (
+                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+                        <button
+                            className="btn-secondary"
+                            onClick={() => setPage(prev => prev + 1)}
+                            style={{ padding: '0.75rem 2rem' }}
+                        >
+                            Load More
+                        </button>
+                    </div>
+                )}
+            </div>
         </>
     );
 };

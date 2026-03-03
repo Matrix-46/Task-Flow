@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root {
-  --bg-dark: #050505;
+  --bg-page: #050505;
   --bg-card: rgba(255, 255, 255, 0.03);
   --glass-border: rgba(255, 255, 255, 0.1);
   --text-primary: #ffffff;
   --text-secondary: #94a3b8;
   --text-muted: rgba(255, 255, 255, 0.62);
+  --navbar-bg: rgba(5, 5, 5, 0.85);
 
   --primary-glow: #6366f1;
   /* Indigo */
@@ -21,6 +22,17 @@
   --font-main: 'Space Grotesk', 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
+.light-theme {
+  --bg-page: #f8fafc;
+  --bg-card: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: rgba(15, 23, 42, 0.7);
+  --navbar-bg: rgba(248, 250, 252, 0.85);
+  --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -29,11 +41,7 @@
 
 body {
   font-family: var(--font-main);
-  background: linear-gradient(rgba(5, 5, 5, 0.8), rgba(5, 5, 5, 0.8)), url('/images/background.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background: var(--bg-page);
   color: var(--text-primary);
   line-height: 1.6;
   min-height: 100vh;
@@ -69,14 +77,14 @@ a {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-dark);
+  background: var(--bg-page);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: var(--glass-border);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--text-muted);
 }

@@ -1,17 +1,30 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { LogOut, LayoutDashboard, User, CheckSquare, Menu, X } from 'lucide-react';
+import { LogOut, LayoutDashboard, User, CheckSquare, Menu, X, Sun, Moon } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTheme } from '../context/ThemeContext';
 
 const Navbar = () => {
     const { user, logout } = useAuth();
+    const { theme, toggleTheme } = useTheme();
     const location = useLocation();
     const [mobileOpen, setMobileOpen] = useState(false);
 
     useEffect(() => {
         setMobileOpen(false);
     }, [location.pathname, location.hash]);
+
+    const ThemeToggle = () => (
+        <button
+            onClick={toggleTheme}
+            className="btn-icon"
+            style={{ marginRight: '0.5rem' }}
+            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+        >
+            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+        </button>
+    );
 
     // If not logged in, show simple public navbar
     if (!user) {
@@ -29,18 +42,24 @@ const Navbar = () => {
                         <Link to="/#features" className="nav-item">Features</Link>
                         <Link to="/#process" className="nav-item">Process</Link>
                         <Link to="/#about" className="nav-item">About Us</Link>
+                        <ThemeToggle />
                         <Link to="/login" className="nav-item nav-item--muted" style={{ marginLeft: '1rem' }}>Sign in</Link>
                     </div>
 
-                    <button
-                        className="nav-burger"
-                        type="button"
-                        aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-                        aria-expanded={mobileOpen}
-                        onClick={() => setMobileOpen((v) => !v)}
-                    >
-                        {mobileOpen ? <X size={18} /> : <Menu size={18} />}
-                    </button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div className="nav-burger-wrap" style={{ display: 'none' }}>
+                            <ThemeToggle />
+                        </div>
+                        <button
+                            className="nav-burger"
+                            type="button"
+                            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+                            aria-expanded={mobileOpen}
+                            onClick={() => setMobileOpen((v) => !v)}
+                        >
+                            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+                        </button>
+                    </div>
                 </div>
 
                 {mobileOpen && (
@@ -54,6 +73,7 @@ const Navbar = () => {
                             </div>
 
                             <div className="nav-drawer-links">
+                                <ThemeToggle />
                                 <Link to="/login" className="btn-secondary" onClick={() => setMobileOpen(false)}>Sign in</Link>
                             </div>
                         </div>
@@ -80,6 +100,8 @@ const Navbar = () => {
                 </div>
 
                 <div className="nav-links">
+                    <ThemeToggle />
+
                     <Link to="/dashboard" className="nav-item" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <LayoutDashboard size={18} />
                         Dashboard

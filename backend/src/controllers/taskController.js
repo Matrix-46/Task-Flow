@@ -13,13 +13,34 @@ exports.getTasks = async (req, res, next) => {
             query.status = req.query.status;
         }
 
+        if (req.query.search) {
+            query.$or = [
+                { title: { $regex: req.query.search, $options: 'i' } },
+                { description: { $regex: req.query.search, $options: 'i' } }
+            ];
+        }
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
         const tasks = await Task.find(query)
             .populate('userId', 'email role')
-            .sort({ createdAt: -1 });
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        const total = await Task.countDocuments(query);
 
         res.status(200).json({
             success: true,
             count: tasks.length,
+            pagination: {
+                total,
+                page,
+                limit,
+                pages: Math.ceil(total / limit)
+            },
             data: { tasks }
         });
     } catch (error) {
@@ -71,6 +92,9 @@ exports.createTask = async (req, res, next) => {
 
         await task.populate('userId', 'email role');
 
+        // Emit socket event
+        req.app.get('io').emit('task:created', task);
+
         res.status(201).json({
             success: true,
             message: 'Task created successfully',
@@ -117,6 +141,9 @@ exports.updateTask = async (req, res, next) => {
             }
         ).populate('userId', 'email role');
 
+        // Emit socket event
+        req.app.get('io').emit('task:updated', task);
+
         res.status(200).json({
             success: true,
             message: 'Task updated successfully',
@@ -146,6 +173,9 @@ exports.deleteTask = async (req, res, next) => {
         }
 
         await task.deleteOne();
+
+        // Emit socket event
+        req.app.get('io').emit('task:deleted', req.params.id);
 
         res.status(200).json({
             success: true,

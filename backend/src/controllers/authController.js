@@ -2,10 +2,42 @@ const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 const User = require('../models/User');
 
-const generateToken = (id) => {
+const generateAccessToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: '24h'
+        expiresIn: '15m'
     });
+};
+
+const generateRefreshToken = (id) => {
+    return jwt.sign({ id }, process.env.REFRESH_TOKEN_SECRET || 'refresh-secret-key', {
+        expiresIn: '7d'
+    });
+};
+
+const sendTokenResponse = (user, statusCode, res) => {
+    const accessToken = generateAccessToken(user._id);
+    const refreshToken = generateRefreshToken(user._id);
+
+    const cookieOptions = {
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict'
+    };
+
+    res.status(statusCode)
+        .cookie('refreshToken', refreshToken, cookieOptions)
+        .json({
+            success: true,
+            data: {
+                user: {
+                    id: user._id,
+                    email: user.email,
+                    role: user.role
+                },
+                accessToken
+            }
+        });
 };
 
 exports.register = async (req, res, next) => {
@@ -35,20 +67,7 @@ exports.register = async (req, res, next) => {
             role: role || 'user'
         });
 
-        const token = generateToken(user._id);
-
-        res.status(201).json({
-            success: true,
-            message: 'User registered successfully',
-            data: {
-                user: {
-                    id: user._id,
-                    email: user.email,
-                    role: user.role
-                },
-                token
-            }
-        });
+        sendTokenResponse(user, 201, res);
     } catch (error) {
         next(error);
     }
@@ -85,22 +104,44 @@ exports.login = async (req, res, next) => {
             });
         }
 
-        const token = generateToken(user._id);
+        sendTokenResponse(user, 200, res);
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.refresh = async (req, res, next) => {
+    try {
+        const refreshToken = req.cookies.refreshToken;
+
+        if (!refreshToken) {
+            return res.status(401).json({
+                success: false,
+                message: 'No refresh token provided'
+            });
+        }
+
+        const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET || 'refresh-secret-key');
+        const user = await User.findById(decoded.id);
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        const accessToken = generateAccessToken(user._id);
 
         res.status(200).json({
             success: true,
-            message: 'Login successful',
-            data: {
-                user: {
-                    id: user._id,
-                    email: user.email,
-                    role: user.role
-                },
-                token
-            }
+            data: { accessToken }
         });
     } catch (error) {
-        next(error);
+        res.status(401).json({
+            success: false,
+            message: 'Invalid refresh token'
+        });
     }
 };
 
