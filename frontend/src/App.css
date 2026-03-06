@@ -127,7 +127,7 @@
 
 .form-group label {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   font-size: 0.9rem;
   color: var(--text-secondary);
   font-weight: 500;
@@ -224,7 +224,7 @@
 .dashboard-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 6rem 1.5rem;
+  padding: 8rem 2rem;
   position: relative;
 }
 
@@ -244,15 +244,21 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 3.5rem;
-  padding-bottom: 1.5rem;
+  margin-bottom: 4.5rem;
+  padding-bottom: 2rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  gap: 2rem;
+  gap: 2.5rem;
 }
 
 .dashboard-header h1 {
   font-size: clamp(2.5rem, 5vw, 3.5rem);
   font-weight: 800;
+  line-height: 1.1;
+}
+
+.dashboard-subtitle {
+  margin-top: 0.75rem;
+  color: var(--text-muted);
 }
 
 body {
@@ -297,7 +303,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 2.5rem;
 }
 
 .navbar--public {
@@ -331,11 +337,100 @@ body {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 3rem;
+  gap: 2rem;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+}
+
+/* Desktop nav - hidden on mobile */
+.nav-links--desktop {
+  display: flex;
+}
+
+/* Hamburger button group - hidden on desktop */
+.nav-hamburger {
+  display: none;
+  align-items: center;
+  gap: 4px;
+}
+
+.hamburger-btn {
+  padding: 8px;
+}
+
+/* Mobile dropdown menu */
+.nav-mobile-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background: var(--navbar-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  padding: 0.75rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+}
+
+.nav-mobile-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background 0.15s, color 0.15s;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.nav-mobile-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+}
+
+.nav-mobile-accent {
+  color: var(--primary-glow);
+}
+
+.nav-mobile-user {
+  opacity: 0.7;
+  font-size: 0.9rem;
+  cursor: default;
+}
+
+.nav-mobile-user:hover {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.nav-mobile-logout {
+  color: #f87171;
+}
+
+.nav-mobile-logout:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+}
+
+.nav-mobile-divider {
+  height: 1px;
+  background: var(--glass-border);
+  margin: 0.4rem 0;
 }
 
 .nav-links--public {
-  gap: 1.6rem;
+  gap: 1.2rem;
 }
 
 .nav-item {
@@ -358,84 +453,7 @@ body {
   color: var(--text-primary);
 }
 
-/* Public mobile menu */
-.nav-burger {
-  display: none;
-  background: var(--bg-card);
-  border: 1px solid var(--glass-border);
-  color: var(--text-primary);
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.nav-drawer-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(6px);
-  z-index: 2000;
-  display: flex;
-  justify-content: flex-end;
-  padding: 16px;
-}
-
-.nav-drawer {
-  width: min(420px, 92vw);
-  border-radius: var(--radius-xl);
-  padding: 18px;
-  box-shadow: var(--shadow-soft);
-}
-
-.nav-drawer-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  margin-bottom: 14px;
-}
-
-.nav-drawer-title {
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
-
-.nav-drawer-close {
-  background: transparent;
-  border: 0;
-  color: var(--text-primary);
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
-}
-
-.nav-drawer-close:hover {
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.nav-drawer-links {
-  display: grid;
-  gap: 10px;
-}
-
-.nav-drawer-link {
-  padding: 12px 12px;
-  border-radius: 14px;
-  text-decoration: none;
-  color: var(--text-primary);
-  border: 1px solid var(--glass-border);
-  background: var(--bg-card);
-  font-weight: 700;
-}
-
-.nav-drawer-link:hover {
-  background: rgba(255, 255, 255, 0.06);
-}
+/* Mobile menu managed via .nav-mobile-menu above */
 
 /* --- Landing (Arik-like) --- */
 .container {
@@ -946,20 +964,11 @@ body {
 @media (max-width: 980px) {
   .navbar {
     padding: 1rem 1.25rem;
+    position: relative;
   }
 
-  .nav-links {
-    gap: 1rem;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-  }
-
-  .nav-links--public {
-    display: none;
-  }
-
-  .nav-burger {
-    display: inline-flex;
+  .nav-links--desktop {
+    gap: 0.85rem;
   }
 
   .landing-hero {
@@ -969,24 +978,24 @@ body {
   .hero-grid {
     grid-template-columns: 1fr;
   }
-
-
 }
 
 /* --- Tasks & Grid --- */
 .tasks-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  justify-content: center;
+  align-items: stretch;
 }
 
 .task-card {
-  padding: 1.75rem;
+  padding: 2.25rem;
   border-radius: var(--radius-xl);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 220px;
+  min-height: 240px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -1003,8 +1012,8 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1rem;
-  gap: 12px;
+  margin-bottom: 1.5rem;
+  gap: 1.5rem;
 }
 
 .task-title {
@@ -1017,8 +1026,8 @@ body {
 .task-desc {
   color: var(--text-secondary);
   font-size: 0.95rem;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
+  line-height: 1.7;
+  margin-bottom: 1.75rem;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   line-clamp: 3;
@@ -1273,6 +1282,19 @@ body {
 /* Mobile Layout (< 768px) */
 @media (max-width: 768px) {
 
+  /* Switch to hamburger menu */
+  .nav-links--desktop {
+    display: none !important;
+  }
+
+  .nav-hamburger {
+    display: flex !important;
+  }
+
+  .navbar {
+    position: relative;
+  }
+
   /* Allow scrolling on mobile if content overflows */
   .landing {
     height: auto;
@@ -1282,94 +1304,12 @@ body {
   }
 
   .landing-main {
+    justify-content: flex-start;
     padding-top: 60px;
   }
 
-  /* Navbar Adjustments - Remove hamburger, show links normally */
-  .nav-inner {
-    flex-direction: column;
-    padding: 1rem 0.5rem;
-    gap: 1rem;
-  }
-
-  .nav-links {
-    display: flex !important;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem 1rem;
-    width: 100%;
-  }
-
-  .nav-item {
-    font-size: 0.85rem !important;
-  }
-
-  .nav-burger,
-  .nav-drawer,
-  .nav-drawer-overlay {
-    display: none !important;
-  }
-
-  .nav-user-display {
-    display: none !important;
-    /* Hide email on small screens to save space */
-  }
-
-  /* Force vertical stacking for key sections */
-  .landing-actions {
-    flex-direction: column;
-    width: 100%;
-    gap: 1rem;
-  }
-
-  .landing-actions a {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .cards-3 {
-    grid-template-columns: 1fr !important;
-    gap: 1.5rem;
-  }
-
-  .about-grid {
-    grid-template-columns: 1fr !important;
-    gap: 2rem;
-  }
-
-  .about-points {
-    grid-template-columns: 1fr !important;
-    gap: 1.5rem;
-  }
-
-  .hero-copy {
-    text-align: center;
-    padding: 0 1rem;
-  }
-
-  .landing-title {
-    font-size: 2.2rem !important;
-  }
-
-  .landing-subtitle {
-    font-size: 0.95rem !important;
-  }
-
-  .dashboard-header {
-    flex-direction: column;
-    text-align: center;
-    gap: 1.5rem;
-  }
-
-  .tasks-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .filter-tabs {
-    overflow-x: auto;
-    width: 100%;
-    justify-content: flex-start;
-    padding-bottom: 5px;
+  .landing-hero {
+    padding: 90px 0 60px;
   }
 
   /* Stack metrics vertically */
@@ -1383,23 +1323,19 @@ body {
 
   /* Dashboard Adjustments */
   .dashboard-container {
-    padding: 1rem;
+    padding: 5rem 1rem 2rem;
   }
 
   .dashboard-header {
     flex-direction: column;
     align-items: stretch;
     gap: 1.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
   }
 
   .dashboard-header .btn-primary {
     width: 100%;
     justify-content: center;
-  }
-
-  .tasks-grid {
-    grid-template-columns: 1fr !important;
   }
 
   .filter-area {
@@ -1453,13 +1389,30 @@ body {
   .about-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
+    padding: 24px;
   }
 
   .about-copy {
     text-align: center;
   }
 
+  .about-copy .landing-subtitle {
+    text-align: center !important;
+    margin-left: auto !important;
+  }
+
   .about-points {
+    grid-template-columns: 1fr;
+  }
+
+  /* Process list stacking */
+  .process-item {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  /* Tasks grid - single column */
+  .tasks-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1467,27 +1420,35 @@ body {
   .modal-content {
     padding: 1.5rem;
     border-radius: 16px;
+    max-height: 95vh;
+  }
+
+  .modal-overlay {
+    padding: 1rem;
+    align-items: flex-end;
   }
 
   .modal-header h2 {
     font-size: 1.5rem;
   }
+
+  /* Landing page navbar - absolute positioned, needs relative parent fix */
+  .landing .navbar {
+    padding-top: 1rem !important;
+  }
+
+  /* Section padding reduction on mobile */
+  .landing-section {
+    padding: 50px 0;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+  }
 }
 
-/* Extra Small Mobile (< 480px) */
+/* Small Mobile (< 480px) */
 @media (max-width: 480px) {
-  .nav-brand-text {
-    font-size: 1.2rem;
-  }
-
-  .landing-title {
-    font-size: 1.8rem !important;
-  }
-
-  .navbar {
-    padding: 0.5rem !important;
-  }
-
   .landing-title {
     font-size: 2rem;
   }
@@ -1503,5 +1464,43 @@ body {
   .auth-card {
     padding: 1.5rem;
     margin: 0.5rem;
+  }
+
+  .auth-title {
+    font-size: 2rem;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  .feature-card {
+    padding: 20px;
+  }
+
+  .about-grid {
+    padding: 20px;
+  }
+
+  .landing-actions {
+    flex-direction: column;
+  }
+
+  .landing-actions .btn-primary,
+  .landing-actions .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nav-brand-text {
+    font-size: 1.1rem;
+  }
+
+  .task-card {
+    padding: 1.5rem;
+  }
+
+  .dashboard-container {
+    padding: 4.5rem 0.75rem 2rem;
   }
 }
